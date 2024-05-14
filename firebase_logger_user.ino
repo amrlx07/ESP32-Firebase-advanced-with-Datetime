@@ -14,7 +14,7 @@
 
 // Insert Firebase project API Key
 //ganti
-#define API_KEY "AIzaSyA2zjMaWbul2eqDNWvQNWpqbFHDIFpZnHg"
+#define API_KEY "AIzaSyCXCjDHUKVPnnuA89A6akryxY2P8xPqM10"
 
 // Insert Authorized Email and Corresponding Password
 //ganti
@@ -23,7 +23,7 @@
 
 // Insert RTDB URLefine the RTDB URL
 //ganti
-#define DATABASE_URL "https://incubator-v2-default-rtdb.firebaseio.com/"
+#define DATABASE_URL "https://contoh-database-dc882-default-rtdb.firebaseio.com/"
 
 // Define Firebase objects
 FirebaseData fbdo;
@@ -38,11 +38,12 @@ String databasePath;
 // Database child nodes
 String tempPath = "/Suhu";
 String humPath = "/Kelembapan";
+String Datetime = "/DateTime";
 //String nh3Path = "/nh3";
-String fanPath = "/fan";
-String heaterPath = "/heater";
+//String fanPath = "/fan";
+//String heaterPath = "/heater";
 //String lampPath = "/lamp";
-String timePath = "/timestamp";
+//String timePath = "/timestamp";
 
 // Parent Node (to be updated in every loop)
 String parentPath;
@@ -154,7 +155,7 @@ void setup(){
   Serial.println(uid);
 
   // Update database path (sesuaikan)
-  databasePath = "/InkubatorApp2023v1/Monitoring";//"/UsersData/" + uid + "/readings";
+  databasePath = "/DemoDatabase/Monitoring/";//"/UsersData/" + uid + "/readings";
 }
 
 void loop(){
@@ -205,12 +206,15 @@ void loop(){
 
     // Memanggil fungsi untuk mengubah UNIX code ke format datetime
     unixToDateTime(timestamp1, datetime);
+    Serial.print("Datetime: ");
+    Serial.println(datetime);
 
     //sesuaikan
-    parentPath= databasePath + "/001";//+ String(timestamp);
+    parentPath= databasePath + "data/"+ String(timestamp1);
     //gunakan path yang sudah di inisialisasi
     json.set(tempPath.c_str(), (randomNumberTemperature));
     json.set(humPath.c_str(), (randomNumberHumidity));
+    json.set(Datetime.c_str(),(datetime));
     Serial.printf("Set json... %s\n", Firebase.RTDB.setJSON(&fbdo, parentPath.c_str(), &json) ? "ok" : fbdo.errorReason().c_str());
   }
 }
